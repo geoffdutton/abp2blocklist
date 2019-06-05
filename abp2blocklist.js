@@ -24,8 +24,10 @@ const readline = require('readline')
 const { Filter } = require('./adblockpluscore/lib/filterClasses')
 const { ContentBlockerList } = require('./lib/abp2blocklist.js')
 
+const inputFile = argv._[0]
+
 const rl = readline.createInterface({
-  input: fs.createReadStream(argv._[0]),
+  input: fs.createReadStream(inputFile),
   terminal: false
 })
 const blockerList = new ContentBlockerList({ merge: 'all' })
@@ -44,7 +46,7 @@ rl.on('line', line => {
 
 rl.on('close', () => {
   blockerList.generateRules().then(rules => {
-    console.info(`Writing ${rules.length} rules...`)
+    console.info(`\nWriting ${rules.length} rules...`)
     const output = fs.createWriteStream(path.resolve(outputPath, argv.o || 'output.json'))
     // If the rule set is too huge, JSON.stringify throws
     // "RangeError: Invalid string length" on Node.js. As a workaround, print
