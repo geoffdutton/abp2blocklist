@@ -1,1 +1,4 @@
 node_modules
+sources/*
+!sources/test.txt
+

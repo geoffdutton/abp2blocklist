@@ -1,0 +1,4 @@
+! This is an example txt file of ABP style rules
+
+##.whatever
+fakewebsite.com##.ad-header

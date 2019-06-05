@@ -297,6 +297,8 @@ exports.generateRules = {
     runTest(test, [
       // These types of filters are currently completely unsupported.
       testRules(test, ['foo$sitekey=bar'], []),
+      testRules(test, ['huffingtonpost.com##script:inject(overlay-buster.js)'], []),
+      testRules(test, ['blockadblock.com##+js(bab-defuser.js)'], []),
       // We skip filters which contain Unicode characters these days.
       testRules(test, ['$domain=🐈.cat', '||🐈', '🐈$domain=🐈.cat',
         '🐈%F0%9F%90%88$domain=🐈.cat', '###🐈'], [])
