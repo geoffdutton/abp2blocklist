@@ -15,43 +15,36 @@
  * along with Adblock Plus.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-"use strict";
+'use strict'
 
-function desc(properties)
-{
-  let descriptor = {};
-  let keys = Object.keys(properties);
+function desc (properties) {
+  let descriptor = {}
+  let keys = Object.keys(properties)
 
-  for (let key of keys)
-    descriptor[key] = Object.getOwnPropertyDescriptor(properties, key);
+  for (let key of keys) { descriptor[key] = Object.getOwnPropertyDescriptor(properties, key) }
 
-  return descriptor;
+  return descriptor
 }
-exports.desc = desc;
+exports.desc = desc
 
-function extend(cls, properties)
-{
-  return Object.create(cls.prototype, desc(properties));
+function extend (cls, properties) {
+  return Object.create(cls.prototype, desc(properties))
 }
-exports.extend = extend;
+exports.extend = extend
 
-function findIndex(iterable, callback, thisArg)
-{
-  let index = 0;
-  for (let item of iterable)
-  {
-    if (callback.call(thisArg, item))
-      return index;
+function findIndex (iterable, callback, thisArg) {
+  let index = 0
+  for (let item of iterable) {
+    if (callback.call(thisArg, item)) { return index }
 
-    index++;
+    index++
   }
 
-  return -1;
+  return -1
 }
-exports.findIndex = findIndex;
+exports.findIndex = findIndex
 
-function indexOf(iterable, searchElement)
-{
-  return findIndex(iterable, item => item === searchElement);
+function indexOf (iterable, searchElement) {
+  return findIndex(iterable, item => item === searchElement)
 }
-exports.indexOf = indexOf;
+exports.indexOf = indexOf

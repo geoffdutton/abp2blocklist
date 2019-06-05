@@ -15,36 +15,32 @@
  * along with Adblock Plus.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-"use strict";
+'use strict'
 
-let readline = require("readline");
-let {Filter} = require("./adblockpluscore/lib/filterClasses");
-let {ContentBlockerList} = require("./lib/abp2blocklist.js");
+const readline = require('readline')
+const { Filter } = require('./adblockpluscore/lib/filterClasses')
+const { ContentBlockerList } = require('./lib/abp2blocklist.js')
 
-var rl = readline.createInterface({input: process.stdin, terminal: false});
-var blockerList = new ContentBlockerList({merge: "all"});
+const rl = readline.createInterface({ input: process.stdin, terminal: false })
+const blockerList = new ContentBlockerList({ merge: 'all' })
 
-rl.on("line", line =>
-{
-  if (/^\s*[^\[\s]/.test(line))
-    blockerList.addFilter(Filter.fromText(Filter.normalize(line)));
-});
+rl.on('line', line => {
+  if (/^\s*[^[\s]/.test(line)) {
+    blockerList.addFilter(Filter.fromText(Filter.normalize(line)))
+  }
+})
 
-rl.on("close", () =>
-{
-  blockerList.generateRules().then(rules =>
-  {
+rl.on('close', () => {
+  blockerList.generateRules().then(rules => {
     // If the rule set is too huge, JSON.stringify throws
     // "RangeError: Invalid string length" on Node.js. As a workaround, print
     // each rule individually.
-    console.log("[");
-    if (rules.length > 0)
-    {
-      let stringifyRule = rule => JSON.stringify(rule, null, "\t");
-      for (let i = 0; i < rules.length - 1; i++)
-        console.log(stringifyRule(rules[i]) + ",");
-      console.log(stringifyRule(rules[rules.length - 1]));
+    console.log('[')
+    if (rules.length > 0) {
+      let stringifyRule = rule => JSON.stringify(rule, null, '\t')
+      for (let i = 0; i < rules.length - 1; i++) { console.log(stringifyRule(rules[i]) + ',') }
+      console.log(stringifyRule(rules[rules.length - 1]))
     }
-    console.log("]");
-  });
-});
+    console.log(']')
+  })
+})

@@ -15,28 +15,26 @@
  * along with Adblock Plus.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-"use strict";
+'use strict'
 
-const publicSuffixes = require("../data/publicSuffixList.json");
+const publicSuffixes = require('../data/publicSuffixList.json')
 
 /**
  * Map of public suffixes to their offsets.
  * @type {Map.<string,number>}
  */
-let publicSuffixMap = buildPublicSuffixMap();
+let publicSuffixMap = buildPublicSuffixMap()
 
 /**
  * Builds a map of public suffixes to their offsets.
  * @returns {Map.<string,number>}
  */
-function buildPublicSuffixMap()
-{
-  let map = new Map();
+function buildPublicSuffixMap () {
+  let map = new Map()
 
-  for (let key in publicSuffixes)
-    map.set(key, publicSuffixes[key]);
+  for (let key in publicSuffixes) { map.set(key, publicSuffixes[key]) }
 
-  return map;
+  return map
 }
 
 /**
@@ -51,21 +49,18 @@ function buildPublicSuffixMap()
  *
  * @yields {string} The next suffix for the domain.
  */
-function* suffixes(domain, includeBlank = false)
-{
-  while (domain != "")
-  {
-    yield domain;
+function * suffixes (domain, includeBlank = false) {
+  while (domain !== '') {
+    yield domain
 
-    let dotIndex = domain.indexOf(".");
-    domain = dotIndex == -1 ? "" : domain.substr(dotIndex + 1);
+    let dotIndex = domain.indexOf('.')
+    domain = dotIndex === -1 ? '' : domain.substr(dotIndex + 1)
   }
 
-  if (includeBlank)
-    yield "";
+  if (includeBlank) { yield '' }
 }
 
-exports.suffixes = suffixes;
+exports.suffixes = suffixes
 
 /**
  * Checks whether the given hostname is a domain.
@@ -73,15 +68,13 @@ exports.suffixes = suffixes;
  * @param {string} hostname
  * @returns {boolean}
  */
-function isDomain(hostname)
-{
+function isDomain (hostname) {
   // No hostname or IPv4 address, also considering hexadecimal octets.
-  if (/^((0x[\da-f]+|\d+)(\.|$))*$/i.test(hostname))
-    return false;
+  if (/^((0x[\da-f]+|\d+)(\.|$))*$/i.test(hostname)) { return false }
 
   // IPv6 address. Since there can't be colons in domains, we can
   // just check whether there are any colons to exclude IPv6 addresses.
-  return hostname.indexOf(":") == -1;
+  return hostname.indexOf(':') === -1
 }
 
 /**
@@ -90,34 +83,33 @@ function isDomain(hostname)
  * @param {string} hostname
  * @returns {string}
  */
-function getDomain(hostname)
-{
-  let slices = [];
-  let cutoff = NaN;
+function getDomain (hostname) {
+  let slices = []
+  let cutoff = NaN
 
-  for (let suffix of suffixes(hostname))
-  {
-    slices.push(suffix);
+  for (let suffix of suffixes(hostname)) {
+    slices.push(suffix)
 
-    let offset = publicSuffixMap.get(suffix);
+    let offset = publicSuffixMap.get(suffix)
 
-    if (typeof offset != "undefined")
-    {
-      cutoff = slices.length - 1 - offset;
-      break;
+    if (typeof offset !== 'undefined') {
+      cutoff = slices.length - 1 - offset
+      break
     }
   }
 
-  if (isNaN(cutoff))
-    return slices.length > 2 ? slices[slices.length - 2] : hostname;
+  if (isNaN(cutoff)) {
+    return slices.length > 2 ? slices[slices.length - 2] : hostname
+  }
 
-  if (cutoff <= 0)
-    return hostname;
+  if (cutoff <= 0) {
+    return hostname
+  }
 
-  return slices[cutoff];
+  return slices[cutoff]
 }
 
-exports.getDomain = getDomain;
+exports.getDomain = getDomain
 
 /**
  * Checks whether a request's origin is different from its document's origin.
@@ -127,23 +119,26 @@ exports.getDomain = getDomain;
  *
  * @returns {boolean}
  */
-function isThirdParty(url, documentHostname)
-{
-  let requestHostname = url.hostname;
+function isThirdParty (url, documentHostname) {
+  let requestHostname = url.hostname
 
-  if (requestHostname[requestHostname.length - 1] == ".")
-    requestHostname = requestHostname.replace(/\.+$/, "");
+  if (requestHostname[requestHostname.length - 1] === '.') {
+    requestHostname = requestHostname.replace(/\.+$/, '')
+  }
 
-  if (documentHostname[documentHostname.length - 1] == ".")
-    documentHostname = documentHostname.replace(/\.+$/, "");
+  if (documentHostname[documentHostname.length - 1] === '.') {
+    documentHostname = documentHostname.replace(/\.+$/, '')
+  }
 
-  if (requestHostname == documentHostname)
-    return false;
+  if (requestHostname === documentHostname) {
+    return false
+  }
 
-  if (!isDomain(requestHostname) || !isDomain(documentHostname))
-    return true;
+  if (!isDomain(requestHostname) || !isDomain(documentHostname)) {
+    return true
+  }
 
-  return getDomain(requestHostname) != getDomain(documentHostname);
+  return getDomain(requestHostname) !== getDomain(documentHostname)
 }
 
-exports.isThirdParty = isThirdParty;
+exports.isThirdParty = isThirdParty

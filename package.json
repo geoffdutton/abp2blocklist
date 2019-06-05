@@ -2,9 +2,11 @@
   "license": "GPL-3.0",
   "repository": {},
   "devDependencies": {
-    "nodeunit": "0.9.1"
+    "nodeunit": "^0.11.3",
+    "standard": "^12.0.1"
   },
   "scripts": {
-    "test": "node -e 'require(\".bin/nodeunit\");'"
+    "lint": "standard --fix",
+    "test": "nodeunit"
   }
 }
