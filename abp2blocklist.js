@@ -15,7 +15,7 @@
  * along with Adblock Plus.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Example: node abp2blocklist.js test.txt -o test.json
+// Example: node abp2blocklist.js test.txt [-o test.json]
 
 const argv = require('minimist')(process.argv.slice(2))
 const fs = require('fs')

@@ -22,7 +22,7 @@ npm install
 
 Create a WebKit block list `output.json` from the Adblock Plus filter list `input.txt`:
 ```
-node abp2blocklist.js < input.txt > output.json
+node abp2blocklist.js sources/input.txt -o output.json
 ```
 
 ## Tests
