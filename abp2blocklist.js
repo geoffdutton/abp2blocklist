@@ -32,7 +32,7 @@ const rl = readline.createInterface({
 })
 const blockerList = new ContentBlockerList({ merge: 'all' })
 
-const stringifyRule = rule => JSON.stringify(rule, null, '\t')
+const stringifyRule = rule => JSON.stringify(rule)
 
 const outputPath = path.resolve(__dirname, 'sources')
 
